@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+torch
+transformers
+pydantic
+scikit-learn
+librosa
+timm
+opencv-python
+pillow
+facenet-pytorch
+numpy<2.0.0
+web3
+eth-account

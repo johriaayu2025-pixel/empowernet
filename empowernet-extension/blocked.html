@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 32px;
+            border: 1px solid #ef444455;
+            max-width: 400px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-weight: 800;
+            color: #ef4444;
+        }
+
+        p {
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        button {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="icon">🚫</div>
+        <h1>Access Blocked</h1>
+        <p>EmpowerNet has identified this domain as high-risk or it was manually added to your blacklist. Access is
+            restricted to prevent potential fraud.</p>
+        <button onclick="window.history.back()">Go Back</button>
+    </div>
+</body>
+
+</html>

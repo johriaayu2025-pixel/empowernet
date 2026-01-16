@@ -1,0 +1,8 @@
+{
+  "name": "Copy of EmpowerNet – AI Scam & Deepfake Detection Platform",
+  "description": "A production-ready platform for detecting AI scams, deepfakes, and phishing threats with forensic ledger evidence anchoring and advanced ML analysis.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

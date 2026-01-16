@@ -1,0 +1,9 @@
+text,label
+"Your account has been suspended. Click here to verify",scam
+"Congratulations! You won a lottery prize",scam
+"Urgent: Update your bank details immediately",scam
+"Limited time offer, act now",scam
+"Meeting scheduled at 10am tomorrow",safe
+"Can we reschedule our call?",safe
+"Invoice attached for your review",safe
+"Let's catch up this weekend",safe

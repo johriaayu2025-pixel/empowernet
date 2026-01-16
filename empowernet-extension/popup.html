@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EmpowerNet Safety Panel</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <div class="dashboard">
+    <header>
+      <div class="logo-area">
+        <span class="logo-icon">🛡️</span>
+        <h1>EmpowerNet</h1>
+      </div>
+      <div id="global-status" class="status-badge safe">🟢 SYSTEM SECURE</div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="live">Live Protect</button>
+      <button class="tab-btn" data-tab="image">Media Scan</button>
+      <button class="tab-btn" data-tab="blocked">Blocked Sites</button>
+      <button class="tab-btn" data-tab="history">History</button>
+    </nav>
+
+    <main class="content">
+      <!-- Live Scan Tab -->
+      <section id="tab-live" class="tab-pane active">
+        <div class="card live-status">
+          <h3>Active Page Scan</h3>
+          <div id="live-scan-result">
+            <p class="placeholder">Analyzing current page context...</p>
+          </div>
+          <div class="action-area" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+            <button id="scan-now-btn" class="primary-btn"
+              style="width: 100%; margin-bottom: 10px; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer;">🔍
+              Scan Current Page</button>
+            <button id="block-site-btn" class="danger-btn" style="width: 100%;">🚫 Block This Site</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Image/Media Tab (Merged) -->
+      <section id="tab-image" class="tab-pane">
+        <div class="card upload-area" id="image-upload">
+          <p>Drop file (Image/Video/Audio) to scan</p>
+          <input type="file" id="image-input" accept="image/*,video/*,audio/*" hidden>
+        </div>
+        <div id="image-result" class="result-area"></div>
+      </section>
+
+      <!-- Blocked Sites Tab -->
+      <section id="tab-blocked" class="tab-pane">
+        <div class="card">
+          <h3>Domain Blacklist</h3>
+          <div id="blocked-list" class="history-list">
+            <p class="placeholder">No domains blocked yet.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- History Tab -->
+      <section id="tab-history" class="tab-pane">
+        <div id="scan-history" class="history-list">
+          <p class="placeholder">No recent scans</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p style="font-size: 10px; color: #999; text-align: center;">EmpowerNet V3.0 • Secure Forensic Proof</p>
+    </footer>
+  </div>
+  <script src="popup.js" type="module"></script>
+</body>
+
+</html>
