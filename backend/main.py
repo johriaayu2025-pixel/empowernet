@@ -10,16 +10,26 @@ from ml.video_infer import analyze_video_base64
 from ml.video_plus_infer import analyze_video_base64_plus
 from hedera.service import hedera_service
 
+import os
+
 app = FastAPI()
+
+# Railway/Production CORS handling
+allowed_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:3001",
+]
+
+# Add custom frontend URL if provided via environment variable
+frontend_url = os.getenv("FRONTEND_URL")
+if frontend_url:
+    allowed_origins.append(frontend_url)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000", 
-        "http://127.0.0.1:3000",
-        "http://localhost:3001",
-        "http://127.0.0.1:3001"
-    ],
+    allow_origins=["*"] if os.getenv("ENV") != "production" else allowed_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )

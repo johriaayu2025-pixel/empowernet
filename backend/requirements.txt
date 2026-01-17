@@ -1,6 +1,8 @@
 fastapi
 uvicorn
+--index-url https://download.pytorch.org/whl/cpu
 torch
+torchvision
 transformers
 pydantic
 scikit-learn
