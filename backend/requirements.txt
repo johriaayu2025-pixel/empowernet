@@ -6,6 +6,9 @@ transformers
 pydantic
 scikit-learn
 librosa
+hiero-sdk-python
+python-multipart
+google-generativeai
 timm
 opencv-python
 pillow
