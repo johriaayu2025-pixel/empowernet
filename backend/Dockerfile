@@ -26,5 +26,5 @@ COPY . .
 EXPOSE 8001
 
 # Command to run the application
-# Railway provides the PORT environment variable
-CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8001}"]
+# Railway provides the PORT environment variable. We CD into backend to ensure main:app is found.
+CMD ["sh", "-c", "if [ -d backend ]; then cd backend; fi && uvicorn main:app --host 0.0.0.0 --port ${PORT:-8001}"]
