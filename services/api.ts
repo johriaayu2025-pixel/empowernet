@@ -3,7 +3,9 @@ export async function runScan(payload: {
   content: string;
   label?: string;
 }) {
-  const baseUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:8001";
+  let baseUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:8001";
+  if (baseUrl && !baseUrl.startsWith("http")) baseUrl = `https://${baseUrl}`;
+  baseUrl = baseUrl.replace(/\/$/, "");
   const response = await fetch(`${baseUrl}/api/scan`, {
     method: "POST",
     headers: {
