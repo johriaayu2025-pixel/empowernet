@@ -17,7 +17,7 @@ COPY backend/requirements.txt .
 
 # Install dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
 
 # Copy the rest of the backend code
 COPY backend/ .
