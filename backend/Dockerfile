@@ -12,19 +12,19 @@ RUN apt-get update && \
     ffmpeg \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
-COPY requirements.txt .
+# Copy requirements first (from backend folder if context is root)
+COPY backend/requirements.txt .
 
-# Install dependencies (CPU versions where applicable)
-# We use --no-cache-dir to keep the image small
-RUN pip install --no-cache-dir -r requirements.txt
+# Install dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the backend code
-COPY . .
+COPY backend/ .
 
-# Expose the port Railway will use (passed via $PORT env var)
+# Expose the port Railway will use
 EXPOSE 8001
 
 # Command to run the application
-# Railway provides the PORT environment variable. We CD into backend to ensure main:app is found.
-CMD ["sh", "-c", "if [ -d backend ]; then cd backend; fi && uvicorn main:app --host 0.0.0.0 --port ${PORT:-8001}"]
+# We are now already in the directory containing main.py thanks to COPY backend/ .
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8001}"]
