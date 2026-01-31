@@ -14,10 +14,11 @@ import {
   Link as LinkIcon,
   CheckCircle2,
   XCircle,
-  ExternalLink
+  ExternalLink,
+  Loader2
 } from 'lucide-react';
 
-import { runScan } from '../services/api';
+import { runScan, verifyEvidence } from '../services/api';
 import { useAppStore } from '../store/useAppStore';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
@@ -34,6 +35,8 @@ const ScanPage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const addScan = useAppStore(state => state.addScan);
   const addAlert = useAppStore(state => state.addAlert);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [verificationResult, setVerificationResult] = useState<any>(null);
 
   const tabs = [
     { id: 'text', label: 'Text', icon: <MessageSquare size={16} />, accept: '' },
@@ -166,6 +169,19 @@ const ScanPage: React.FC = () => {
       console.error(err);
     } finally {
       setIsScanning(false);
+    }
+  };
+
+  const handleVerifyResult = async () => {
+    if (!result?.evidenceHash) return;
+    setIsVerifying(true);
+    try {
+      const res = await verifyEvidence(result.evidenceHash);
+      setVerificationResult(res);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsVerifying(false);
     }
   };
 
@@ -396,33 +412,40 @@ const ScanPage: React.FC = () => {
 
                   <div className="flex flex-col gap-1.5">
                     <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider">Transaction Hash</span>
-                    <div className="font-mono text-[11px] text-gray-600 dark:text-gray-400 break-all">
-                      {result.blockchain?.transactionHash || "pending..."}
+                    <div className={`font-mono text-[11px] break-all ${result.blockchain?.status === 'failed' ? 'text-red-500' : 'text-gray-600 dark:text-gray-400'}`}>
+                      {result.blockchain?.transactionHash || (result.blockchain?.error ? `⚠️ ${result.blockchain.error}` : "pending...")}
                     </div>
                   </div>
                 </div>
 
                 <div className="pt-2 flex flex-wrap gap-3">
-                  {result.blockchain?.explorerUrl && (
-                    <a
-                      href={result.blockchain.explorerUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-5 py-2.5 bg-gray-900 dark:bg-gray-700 text-white text-xs font-bold rounded-xl hover:bg-black dark:hover:bg-gray-600 transition-all flex items-center gap-2 shadow-lg"
-                    >
-                      <ExternalLink size={14} /> View on PolygonScan
-                    </a>
-                  )}
+                  <button
+                    onClick={handleVerifyResult}
+                    disabled={isVerifying}
+                    className="px-5 py-2.5 bg-violet-600 text-white text-xs font-bold rounded-xl hover:bg-violet-700 transition-all flex items-center gap-2 shadow-lg disabled:opacity-50"
+                  >
+                    {isVerifying ? <Loader2 className="animate-spin" size={14} /> : <ShieldCheck size={14} />}
+                    Verify On-Chain Status
+                  </button>
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(result.evidenceHash);
-                      // Potential toast notification here
                     }}
                     className="px-5 py-2.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-xs font-bold rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all flex items-center gap-2 shadow-sm"
                   >
                     <Upload size={14} /> Copy Evidence Hash
                   </button>
                 </div>
+
+                {verificationResult && (
+                  <div className={`p-4 rounded-xl border ${verificationResult.status === 'verified' ? 'bg-green-50 border-green-100 text-green-700' : 'bg-orange-50 border-orange-100 text-orange-700'} text-xs font-medium animate-in fade-in duration-300`}>
+                    {verificationResult.status === 'verified' ? (
+                      <p>✅ Found on Blockchain!</p>
+                    ) : (
+                      <p>⚠️ {verificationResult.message || "Evidence not yet found on blockchain. It might still be processing."}</p>
+                    )}
+                  </div>
+                )}
 
                 <p className="text-[10px] text-gray-400 dark:text-gray-500 italic mt-1 font-medium">
                   "This scan result has been cryptographically anchored on the Polygon blockchain to ensure integrity and prevent tampering."

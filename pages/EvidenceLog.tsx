@@ -210,10 +210,10 @@ const EvidenceLog: React.FC = () => {
                       onClick={() => handleVerify(r.id, r.hash)}
                       disabled={isVerifying && currentVerifyingId === r.id}
                       className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-[9px] font-black tracking-wider uppercase transition-all ${r.verificationStatus === 'verified'
-                          ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200'
-                          : r.verificationStatus === 'failed'
-                            ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 border border-gray-200 hover:bg-gray-200'
+                        ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200'
+                        : r.verificationStatus === 'failed'
+                          ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 border border-gray-200 hover:bg-gray-200'
                         }`}
                     >
                       {isVerifying && currentVerifyingId === r.id ? (
@@ -320,13 +320,9 @@ const EvidenceLog: React.FC = () => {
                   {selectedScan.blockchainTx && (
                     <div className="p-4 bg-gray-50 dark:bg-gray-900/80 rounded-xl border border-gray-100 dark:border-gray-700">
                       <p className="text-[9px] font-bold text-gray-400 uppercase mb-2">Transaction Hash</p>
-                      <a
-                        href={`https://amoy.polygonscan.com/tx/${selectedScan.blockchainTx}`}
-                        target="_blank"
-                        className="font-mono text-[9px] text-indigo-600 hover:underline break-all"
-                      >
+                      <div className="font-mono text-[9px] text-gray-800 dark:text-gray-300 break-all select-all">
                         {selectedScan.blockchainTx}
-                      </a>
+                      </div>
                     </div>
                   )}
                 </div>

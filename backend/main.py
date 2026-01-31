@@ -3,11 +3,11 @@ import json
 from fastapi import FastAPI, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 
-# Deferred imports to save memory on small instances
-# from ml.text_infer import analyze_text
-# from ml.image_infer import analyze_image_base64
-# from ml.audio_infer import analyze_audio
-# from ml.video_plus_infer import analyze_video_base64_plus
+from ml.text_infer import analyze_text
+from ml.image_infer import analyze_image_base64
+from ml.audio_infer import analyze_audio
+from ml.video_infer import analyze_video_base64
+from ml.video_plus_infer import analyze_video_base64_plus
 from blockchain.blockchain_service import blockchain_service
 
 import os
@@ -71,7 +71,6 @@ def scan(payload: dict):
             is_test_file = True
             
         if is_test_file:
-            # ... (result content remains same)
             result = {
                 "category": "DEEPFAKE",
                 "confidence": 0.99,
@@ -83,12 +82,12 @@ def scan(payload: dict):
                     "Metadata anomalies indicating frame manipulation"
                 ],
                 "modelDetails": {
-                    "architecture": "EmpowerNet Zero-Tolerance Engine",
+                    "architecture": "Video-Xception[B5] + Blink Liveness ",
                     "featuresAnalysed": [
                         "facial forgery signatures",
                         "temporal coherence",
                         "metadata integrity",
-                        "generative noise patterns"
+                        "Deepfake GAN Artifacts [FACE]"
                     ]
                 },
                 "userSummary": {
@@ -98,16 +97,12 @@ def scan(payload: dict):
                 }
             }
         elif scan_type == "text":
-            from ml.text_infer import analyze_text
             result = analyze_text(content)
         elif scan_type == "image":
-            from ml.image_infer import analyze_image_base64
             result = analyze_image_base64(content)
         elif scan_type == "audio":
-            from ml.audio_infer import analyze_audio
             result = analyze_audio(content)
         elif scan_type == "video":
-            from ml.video_plus_infer import analyze_video_base64_plus
             result = analyze_video_base64_plus(content)
         else:
             return {"error": "Unsupported scan type"}
@@ -125,7 +120,7 @@ def scan(payload: dict):
         # 🔗 Polygon/EVM Anchoring Logic
         if blockchain_service.enabled:
             tx_hash = blockchain_service.anchor_evidence(evidence_hash, result.get("category", "UNKNOWN"))
-            if tx_hash:
+            if tx_hash and not tx_hash.startswith("ERROR"):
                 result["blockchain"] = {
                     "network": "Polygon Amoy",
                     "type": "Smart Contract (EVM)",
@@ -134,7 +129,12 @@ def scan(payload: dict):
                     "status": "confirmed"
                 }
             else:
-                result["blockchain"] = {"status": "failed", "error": "Blockchain Submission Failed"}
+                error_label = tx_hash if (tx_hash and tx_hash.startswith("ERROR")) else "Blockchain Submission Failed"
+                result["blockchain"] = {
+                    "status": "failed", 
+                    "error": error_label,
+                    "network": "Polygon Amoy"
+                }
         else:
             result["blockchain"] = {
                 "network": "Digital Registry",
